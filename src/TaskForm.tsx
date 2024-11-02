@@ -48,8 +48,7 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
           className="border mx-auto w-64 ml-3"
         />
         <button
-          type="submit"
-          id="addTaskButton"
+          type="submit" id="addTaskButton"
           className="bg-green-600 rounded p-1 m-3 hover:bg-green-300 focus:ring"
         >
           Add item
@@ -72,23 +71,12 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
 
   addTask: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-
-    // Validate that title and dueDate are not empty
-    const { title, description, dueDate } = this.state;
-    if (title.trim() === "" || dueDate.trim() === "") {
-      alert("Title and Due Date are required fields.");
-      return;
-    }
-
     const newTask: TaskItem = {
-      title: title.trim(),
-      description: description.trim(),
-      dueDate: dueDate.trim(),
+      title: this.state.title,
+      description: this.state.description,
+      dueDate: this.state.dueDate,
     };
-
     this.props.addTask(newTask);
-
-    // Reset state after adding task
     this.setState({ title: "", description: "", dueDate: "" });
   };
 }
