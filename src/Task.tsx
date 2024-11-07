@@ -1,5 +1,6 @@
 import "./TaskCard.css";
 import { TaskItem } from "./types";
+import { Link } from "react-router-dom";
 
 interface TaskProps {
   item: TaskItem; // Expect the full TaskItem object
@@ -12,15 +13,12 @@ const Task = ({ item, removeTask }: TaskProps) => {
       <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between ">
         <div>
           {/* Link to task details */}
-          <a href={`/tasks/${item.id || ""}`}>
+          <Link to={`/tasks/${item.id || ""}`}>
             <h2 className="text-base font-bold my-1">{item.title}</h2>
-            {/* Change todoTitle to title */}
-          </a>
+          </Link>
           <p className="text-sm text-slate-500">{item.dueDate}</p>
-          {/* Change todoDueDate to dueDate */}
           <p className="text-sm text-slate-500">
-            Description: {item.description}{" "}
-            {/* Change todoDescription to description */}
+            Description: {item.description}
           </p>
         </div>
 
