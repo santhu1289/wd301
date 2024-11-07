@@ -1,30 +1,39 @@
-import React from "react";
 import "./TaskCard.css";
+import { TaskItem } from "./types";
 
-interface TaskProp {
-  title: string;
-  description?: string; // Optional description prop
-  dueDate?: string; // Optional dueDate prop
+interface TaskProps {
+  item: TaskItem; // Expect the full TaskItem object
+  removeTask: (task: TaskItem) => void;
 }
 
-class Task extends React.Component<TaskProp> {
-  render() {
-    return (
-      <div className="TaskItem shadow-md border border-slate-100 p-4 rounded-md">
-        <h2 className="text-base font-bold my-1">{this.props.title}</h2>
-        {this.props.dueDate && (
+const Task = ({ item, removeTask }: TaskProps) => {
+  return (
+    <div className="TaskItem shadow-md border border-slate-100">
+      <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between ">
+        <div>
+          {/* Link to task details */}
+          <a href={`/tasks/${item.id || ""}`}>
+            <h2 className="text-base font-bold my-1">{item.title}</h2>
+            {/* Change todoTitle to title */}
+          </a>
+          <p className="text-sm text-slate-500">{item.dueDate}</p>
+          {/* Change todoDueDate to dueDate */}
           <p className="text-sm text-slate-500">
-            Due Date: {this.props.dueDate}
+            Description: {item.description}{" "}
+            {/* Change todoDescription to description */}
           </p>
-        )}
-        {this.props.description && (
-          <p className="text-sm text-slate-500">
-            Description: {this.props.description}
-          </p>
-        )}
+        </div>
+
+        {/* Button to delete task */}
+        <button
+          className="deleteTaskButton cursor-pointer flex items-center justify-center h-4 w-4 rounded-full my-5 mr-5"
+          onClick={() => removeTask(item)} // Pass the whole task
+        >
+          X
+        </button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Task;

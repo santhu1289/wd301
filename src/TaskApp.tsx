@@ -1,51 +1,57 @@
-import React from "react";
+import { useEffect } from "react";
 import { TaskItem } from "./types";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface TaskAppProp {}
 interface TaskAppState {
   tasks: TaskItem[];
 }
-class TaskApp extends React.Component<TaskAppProp, TaskAppState> {
-  constructor(props: TaskAppProp) {
-    super(props);
-    this.state = {
-      tasks: [],
-    };
-  }
 
-  render() {
-    return (
-      <div className="container py-10 max-w-4xl mx-auto">
-        <h1 className="text-3xl mb-2 font-bold text-slate-700">
-          Smarter Tasks
-        </h1>
-        <h1 className="text-lg mb-6 text-slate-600">
-          <span className="font-bold">Project: </span>
-          Smart Taks Demo Project for Learning Purpose
-        </h1>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border border-slate-200 rounded-xl p-4">
-            <h1 className="text-slate-500 text-xl font-bold text-center mb-2">
-              Pending
-            </h1>
-            <TaskForm addTask={this.addTask} />
-            <TaskList tasks={this.state.tasks} />
-          </div>
+const TaskApp = () => {
+  const [taskAppState, setTaskAppState] = useLocalStorage<TaskAppState>(
+    "tasks",
+    { tasks: [] }
+  );
+
+  const addTask = (task: TaskItem) => {
+    setTaskAppState({ tasks: [...taskAppState.tasks, task] });
+  };
+
+  const deleteTask = (index: number) => {
+    const updatedTasks = taskAppState.tasks.filter((_, i) => i !== index);
+    setTaskAppState({ tasks: updatedTasks });
+  };
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      console.log(`saved ${taskAppState.tasks.length} items to the Backend`);
+    }, 5000);
+
+    return () => {
+      console.log("Clear or Cancel any existing network calls");
+      clearTimeout(id);
+    };
+  }, [taskAppState.tasks]);
+
+  return (
+    <div className="container py-10 max-w-7xl mx-auto text-center">
+      <h1 className="text-3xl mb-2 font-bold text-slate-700">Smarter Tasks</h1>
+      <h1 className="text-md mb-6 text-slate-600">
+        <span className="font-bold">Project: </span>
+        Smart Tasks Demo Project for Learning Purpose
+      </h1>
+      <div className="grid grid-cols-2 gap-4 text-center">
+        <div className="border border-slate-200 rounded-xl p-4 ">
+          <h1 className="text-slate-500 text-xl font-bold text-center mb-2">
+            Pending
+          </h1>
+          <TaskForm addTask={addTask} />
+          <TaskList tasks={taskAppState.tasks} onDeleteTask={deleteTask} />
         </div>
       </div>
-    );
-  }
-
-  addTask = (task: TaskItem) => {
-    this.setState((state) => {
-      return {
-        tasks: [...state.tasks, task],
-      };
-    });
-  };
-}
+    </div>
+  );
+};
 
 export default TaskApp;
