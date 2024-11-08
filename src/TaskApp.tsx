@@ -10,7 +10,7 @@ interface TaskAppState {
 
 const TaskApp = () => {
   const [taskAppState, setTaskAppState] = useLocalStorage<TaskAppState>(
-    "tasks",
+    "taskAppState", // Updated key for clarity
     { tasks: [] }
   );
 
@@ -25,11 +25,11 @@ const TaskApp = () => {
 
   useEffect(() => {
     const id = setTimeout(() => {
-      console.log(`saved ${taskAppState.tasks.length} items to the Backend`);
+      console.log(`Saved ${taskAppState.tasks.length} items to the backend`);
     }, 5000);
 
     return () => {
-      console.log("Clear or Cancel any existing network calls");
+      console.log("Clearing any existing network calls");
       clearTimeout(id);
     };
   }, [taskAppState.tasks]);

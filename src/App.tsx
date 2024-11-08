@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import TaskListPage from "./pages/TaskListPage";
 import Layout from "./Layout";
 import TaskDetailsPage from "./pages/TaskDetailsPage";
+
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -27,4 +28,5 @@ const router = createBrowserRouter([
 const App = () => {
   return <RouterProvider router={router} />;
 };
+
 export default App;
