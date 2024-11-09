@@ -11,77 +11,6 @@ interface TaskFormState {
   dueDate: string;
 }
 
-// class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
-//   constructor(props: TaskFormProps) {
-//     super(props);
-//     this.state = {
-//       title: "",
-//       description: "",
-//       dueDate: "",
-//     };
-//   }
-
-//   render() {
-//     return (
-//       <form onSubmit={this.addTask} className="place-items-center">
-//         <input
-//           type="text"
-//           id="todoTitle"
-//           value={this.state.title}
-//           onChange={this.titleChanged}
-//           placeholder="Title"
-//           className="block  py-2.5 px-2 w-full text-gray-900 bg-transparent border-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500"
-//         />
-//         <input
-//           type="text"
-//           id="todoDescription"
-//           value={this.state.description}
-//           onChange={this.descriptionChanged}
-//           placeholder="Description"
-//           className="block my-2 py-2.5 px-2 w-full text-gray-900 bg-transparent border-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500"
-//         />
-//         <input
-//           type="date"
-//           id="todoDueDate"
-//           value={this.state.dueDate}
-//           onChange={this.dueDateChanged}
-//           className="block  py-2.5 px-2 w-full text-gray-900 bg-transparent border-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500"
-//         />
-//         <button
-//           type="submit"
-//           id="addTaskButton"
-//           className="bg-green-600 rounded p-1 m-3 hover:bg-green-300 focus:ring placeholder-slate-400 "
-//         >
-//           Add item
-//         </button>
-//       </form>
-//     );
-//   }
-
-//   titleChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-//     this.setState({ title: event.target.value });
-//   };
-
-//   descriptionChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-//     this.setState({ description: event.target.value });
-//   };
-
-//   dueDateChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-//     this.setState({ dueDate: event.target.value });
-//   };
-
-//   addTask: React.FormEventHandler<HTMLFormElement> = (event) => {
-//     event.preventDefault();
-//     const newTask: TaskItem = {
-//       title: this.state.title,
-//       description: this.state.description,
-//       dueDate: this.state.dueDate,
-//     };
-//     this.props.addTask(newTask);
-//     this.setState({ title: "", description: "", dueDate: "" });
-//   };
-// }
-
 const TaskForm = (props: TaskFormProps) => {
   const [formState, setFormState] = React.useState<TaskFormState>({
     title: "",
@@ -90,29 +19,40 @@ const TaskForm = (props: TaskFormProps) => {
   });
 
   const titleChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    console.log(`${event.target.value}`);
     setFormState({ ...formState, title: event.target.value });
   };
+
   const descriptionChanged: React.ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    console.log(`${event.target.value}`);
     setFormState({ ...formState, description: event.target.value });
   };
+
   const dueDateChanged: React.ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    console.log(`${event.target.value}`);
     setFormState({ ...formState, dueDate: event.target.value });
   };
 
   const addTask: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    console.log(`Submitted the form with`);
+    // Ensure title and dueDate are provided
     if (formState.title.length === 0 || formState.dueDate.length === 0) {
       return;
     }
-    props.addTask(formState);
+
+    // Create task with unique `id`
+    const newTask: TaskItem = {
+      id: Date.now().toString(), // Using timestamp as unique `id`
+      title: formState.title,
+      description: formState.description,
+      dueDate: formState.dueDate,
+    };
+
+    // Pass the new task with `id` to `addTask` function
+    props.addTask(newTask);
+
+    // Reset form state
     setFormState({ title: "", description: "", dueDate: "" });
   };
   return (
