@@ -51,7 +51,7 @@ const TaskForm = (props: TaskFormProps) => {
 
     // Pass the new task with `id` to `addTask` function
     props.addTask(newTask);
-
+    console.log(newTask.id);
     // Reset form state
     setFormState({ title: "", description: "", dueDate: "" });
   };
